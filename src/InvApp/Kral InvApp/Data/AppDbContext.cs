@@ -5,6 +5,8 @@ namespace Kral_InvApp.Data
 {
     public class AppDbContext : DbContext
     {
+        public DbSet<Portfolio> Portfolios { get; set; }
+
         public AppDbContext() { }
 
         public DbSet<User> Users { get; set; }
@@ -25,6 +27,7 @@ namespace Kral_InvApp.Data
         {
             modelBuilder.Entity<User>().ToTable("users");
         }
+
     }
 }
 
