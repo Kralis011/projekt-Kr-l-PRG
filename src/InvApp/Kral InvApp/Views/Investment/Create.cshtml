@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Nová investice";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-dark text-light shadow">
+                <div class="card-header text-center">
+                    <h3>📈 Nová investice</h3>
+                </div>
+
+                <div class="card-body">
+                    <form method="post">
+                        <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Asset</label>
+                            <input name="assetName" class="form-control" placeholder="AAPL / BTC" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Typ</label>
+                            <select name="assetType" class="form-select">
+                                <option>Akcie</option>
+                                <option>Crypto</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Množství</label>
+                            <input name="amount" type="number" step="0.0001" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Nákupní cena (Kč)</label>
+                            <input name="buyPrice" type="number" step="0.01" class="form-control" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Prodejní cena (Kč)</label>
+                            <input name="sellPrice" type="number" step="0.01" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Datum</label>
+                            <input name="tradeDate" type="date" class="form-control" required />
+                        </div>
+
+                        <button class="btn btn-success w-100">
+                            💾 Uložit investici
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

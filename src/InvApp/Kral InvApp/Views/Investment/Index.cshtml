@@ -1,0 +1,67 @@
+﻿@model List<Kral_InvApp.Entities.Investment>
+
+<h2 class="mb-4">📈 Investice</h2>
+
+<a asp-action="Create"
+   asp-route-portfolioId="@ViewBag.PortfolioId"
+   class="btn btn-success mb-3">
+    ➕ Přidat investici
+</a>
+<a asp-action="Chart"
+   asp-route-portfolioId="@ViewBag.PortfolioId"
+   class="btn btn-outline-primary mb-3">
+    📈 Zobrazit graf
+</a>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card p-3 text-center">
+            <h6>💰 Investováno</h6>
+            <strong>@ViewBag.Invested Kč</strong>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 text-center">
+            <h6>📊 Aktuální hodnota</h6>
+            <strong>@ViewBag.CurrentValue Kč</strong>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-3 text-center">
+            <h6>📈 Zisk / Ztráta</h6>
+            <strong class="@(ViewBag.Profit >= 0 ? "text-success" : "text-danger")">
+                @ViewBag.Profit Kč
+            </strong>
+        </div>
+    </div>
+</div>
+
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>Asset</th>
+            <th>Typ</th>
+            <th>Množství</th>
+            <th>Nákup</th>
+            <th>Prodej</th>
+            <th>Hodnota</th>
+            <th>Datum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.AssetName</td>
+                <td>@i.AssetType</td>
+                <td>@i.Amount</td>
+                <td>@i.BuyPrice Kč</td>
+                <td>@(i.SellPrice?.ToString() ?? "-")</td>
+                <td>@(i.Amount* i.BuyPrice) Kč</td>
+                <td>@i.TradeDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

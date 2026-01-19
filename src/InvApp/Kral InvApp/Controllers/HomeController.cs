@@ -19,16 +19,35 @@ namespace Kral_InvApp.Controllers
         public IActionResult Index()
         {
             var userId = HttpContext.Session.GetInt32("UserId");
-
             if (userId == null)
-            {
                 return RedirectToAction("Login", "Account");
-            }
 
-            var user = _context.Users.FirstOrDefault(u => u.user_id == userId);
+            var portfolios = _context.Portfolios
+                .Where(p => p.UserId == userId)
+                .ToList();
 
-            return View(user);
+            var investments = _context.Investments
+                .Where(i => portfolios.Select(p => p.PortfolioId).Contains(i.PortfolioId))
+                .ToList();
+
+            decimal invested = investments.Sum(i => i.Amount * i.BuyPrice);
+
+            decimal currentValue = investments.Sum(i =>
+                i.SellPrice != null
+                    ? i.Amount * i.SellPrice.Value
+                    : i.Amount * i.BuyPrice
+            );
+
+            ViewBag.PortfolioCount = portfolios.Count;
+            ViewBag.InvestmentCount = investments.Count;
+            ViewBag.Invested = invested;
+            ViewBag.CurrentValue = currentValue;
+            ViewBag.Profit = currentValue - invested;
+
+            return View();
         }
+
     }
+
 
 }

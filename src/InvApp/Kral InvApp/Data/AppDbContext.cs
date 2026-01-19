@@ -8,6 +8,8 @@ namespace Kral_InvApp.Data
         public DbSet<Portfolio> Portfolios { get; set; }
 
         public AppDbContext() { }
+        public DbSet<Investment> Investments { get; set; }
+
 
         public DbSet<User> Users { get; set; }
 

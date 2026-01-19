@@ -1,16 +1,34 @@
 ﻿@model Kral_InvApp.Entities.User
-<h2>Vítej v aplikaci</h2>
+<h2 class="mb-4">📊 Dashboard</h2>
 
-<p><strong>Email:</strong> @Model.email</p>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h6>📁 Portfolia</h6>
+            <strong>@ViewBag.PortfolioCount</strong>
+        </div>
+    </div>
 
-<p><strong>ID uživatele:</strong> @Model.user_id</p>
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h6>📌 Investice</h6>
+            <strong>@ViewBag.InvestmentCount</strong>
+        </div>
+    </div>
 
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h6>💰 Investováno</h6>
+            <strong>@ViewBag.Invested Kč</strong>
+        </div>
+    </div>
 
-@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <div class="col-md-3">
+        <div class="card p-3 text-center">
+            <h6>📈 Zisk / Ztráta</h6>
+            <strong class="@(ViewBag.Profit >= 0 ? "text-success" : "text-danger")">
+                @ViewBag.Profit Kč
+            </strong>
+        </div>
+    </div>
 </div>

@@ -1,17 +1,41 @@
 ﻿@model List<Kral_InvApp.Entities.Portfolio>
 
-<h2>Moje portfolia</h2>
+<h2 class="mb-4">📊 Moje portfolia</h2>
 
-<a asp-action="Create">+ Nové portfolio</a>
+<a asp-action="Create" class="btn btn-primary mb-4">+ Nové portfolio</a>
 
-<ul>
+
+<div class="row">
     @foreach (var p in Model)
     {
-        <li>
-            <strong>@p.Name</strong>
-        </li>
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@p.Name</h5>
 
+                    <a asp-controller="Investment"
+                       asp-action="Index"
+                       asp-route-portfolioId="@p.PortfolioId"
+                       class="btn btn-outline-primary btn-sm">
+                        Zobrazit investice
+                    </a>
+                    <a asp-controller="Investment"
+                       asp-action="Index"
+                       asp-route-portfolioId="@p.PortfolioId">
+                        📊 Investice
+                    </a>
+
+                    <a asp-controller="Investment"
+                       asp-action="Create"
+                       asp-route-portfolioId="@p.PortfolioId">
+                        ➕ Přidat investici
+                    </a>
+
+                </div>
+            </div>
+        </div>
     }
-</ul>
+</div>
+
 
 

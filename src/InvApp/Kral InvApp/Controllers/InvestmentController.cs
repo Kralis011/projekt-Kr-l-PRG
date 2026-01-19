@@ -1,0 +1,86 @@
+﻿using Kral_InvApp.Data;
+using Kral_InvApp.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Linq;
+
+namespace Kral_InvApp.Controllers
+{
+    public class InvestmentController : Controller
+    {
+        private readonly AppDbContext _context;
+
+        public InvestmentController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // =============================
+        // VÝPIS INVESTIC
+        // =============================
+        public IActionResult Index(int portfolioId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
+            var investments = _context.Investments
+                .Where(i => i.PortfolioId == portfolioId)
+                .OrderBy(i => i.TradeDate)
+                .ToList();
+
+            ViewBag.PortfolioId = portfolioId;
+            return View(investments);
+        }
+
+        // =============================
+        // FORMULÁŘ
+        // =============================
+        public IActionResult Create(int portfolioId)
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
+            var portfolioExists = _context.Portfolios
+                .Any(p => p.PortfolioId == portfolioId && p.UserId == userId);
+
+            if (!portfolioExists)
+                return Content("Portfolio neexistuje");
+
+            ViewBag.PortfolioId = portfolioId;
+            return View();
+        }
+
+        // =============================
+        // ULOŽENÍ INVESTICE
+        // =============================
+        [HttpPost]
+        public IActionResult Create(
+            int portfolioId,
+            string assetName,
+            string assetType,
+            decimal amount,
+            decimal buyPrice,
+            decimal? sellPrice,
+            DateTime tradeDate)
+        {
+            var investment = new Investment
+            {
+                AssetName = assetName,
+                AssetType = assetType,
+                Amount = amount,
+                BuyPrice = buyPrice,
+                SellPrice = sellPrice,
+                TradeDate = tradeDate,
+                PortfolioId = portfolioId
+            };
+
+            _context.Investments.Add(investment);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", new { portfolioId });
+        }
+    }
+}
