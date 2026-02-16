@@ -82,5 +82,35 @@ namespace Kral_InvApp.Controllers
 
             return RedirectToAction("Index", new { portfolioId });
         }
+
+        [HttpPost]
+
+        public IActionResult Delete(int id, int portfolioId)
+
+        {
+
+            var investment = _context.Investments
+
+                .FirstOrDefault(i => i.InvestmentId == id && i.PortfolioId == portfolioId);
+
+
+
+            if (investment == null)
+
+                return Content("Investice nenalezena");
+
+
+
+            _context.Investments.Remove(investment);
+
+            _context.SaveChanges();
+
+
+
+            return RedirectToAction("Index", new { portfolioId });
+
+        }
+
+
     }
 }

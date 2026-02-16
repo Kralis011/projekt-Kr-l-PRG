@@ -51,17 +51,60 @@
         </tr>
     </thead>
     <tbody>
+
         @foreach (var i in Model)
+
         {
+
             <tr>
+
                 <td>@i.AssetName</td>
+
                 <td>@i.AssetType</td>
+
                 <td>@i.Amount</td>
+
                 <td>@i.BuyPrice Kč</td>
+
                 <td>@(i.SellPrice?.ToString() ?? "-")</td>
+
                 <td>@(i.Amount* i.BuyPrice) Kč</td>
+
                 <td>@i.TradeDate.ToShortDateString()</td>
+
+
+
+                <td>
+
+                    <form asp-action="Delete" method="post" style="display:inline;">
+
+                        <input type="hidden" name="id" value="@i.InvestmentId" />
+
+                        <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
+
+
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Opravdu smazat?');">
+
+                            Smazat
+
+                        </button>
+
+                    </form>
+
+                </td>
+
+
+
             </tr>
+
         }
+
     </tbody>
+
+
+
+
 </table>
