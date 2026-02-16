@@ -2,43 +2,46 @@
 
 <h2 class="mb-4">📈 Investice</h2>
 
-<a asp-action="Create"
-   asp-route-portfolioId="@ViewBag.PortfolioId"
-   class="btn btn-success mb-3">
-    ➕ Přidat investici
-</a>
-<a asp-action="Chart"
-   asp-route-portfolioId="@ViewBag.PortfolioId"
-   class="btn btn-outline-primary mb-3">
-    📈 Zobrazit graf
-</a>
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card p-3 text-center">
-            <h6>💰 Investováno</h6>
-            <strong>@ViewBag.Invested Kč</strong>
-        </div>
-    </div>
+<div class="mb-3 d-flex gap-2">
+    <a asp-action="Create"
+       asp-route-portfolioId="@ViewBag.PortfolioId"
+       class="btn btn-success">
+        ➕ Přidat investici
+    </a>
 
-    <div class="col-md-4">
-        <div class="card p-3 text-center">
-            <h6>📊 Aktuální hodnota</h6>
-            <strong>@ViewBag.CurrentValue Kč</strong>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card p-3 text-center">
-            <h6>📈 Zisk / Ztráta</h6>
-            <strong class="@(ViewBag.Profit >= 0 ? "text-success" : "text-danger")">
-                @ViewBag.Profit Kč
-            </strong>
-        </div>
-    </div>
+    <a asp-action="Chart"
+       asp-route-portfolioId="@ViewBag.PortfolioId"
+       class="btn btn-outline-primary">
+        📈 Zobrazit graf
+    </a>
 </div>
 
+<div class="stats-wrapper mb-4">
 
-<table class="table table-dark table-striped">
+    <div class="stat-card">
+        <div class="stat-title">💰 Investováno</div>
+        <div class="stat-value">
+            @(((decimal)ViewBag.Invested).ToString("N0")) Kč
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">📊 Aktuální hodnota</div>
+        <div class="stat-value">
+            @(((decimal)ViewBag.Current).ToString("N0")) Kč
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">📈 Zisk / Ztráta</div>
+        <div class="stat-value @(ViewBag.Profit >= 0 ? "profit-positive" : "profit-negative")">
+            @(((decimal)ViewBag.Profit).ToString("N0")) Kč
+        </div>
+    </div>
+
+</div>
+
+<table class="table table-custom">
     <thead>
         <tr>
             <th>Asset</th>
@@ -48,73 +51,51 @@
             <th>Prodej</th>
             <th>Hodnota</th>
             <th>Datum</th>
+            <th>Akce</th>
         </tr>
     </thead>
     <tbody>
-
         @foreach (var i in Model)
-
         {
+            var value = i.SellPrice.HasValue
+            ? i.Amount * i.SellPrice.Value
+            : i.Amount * i.BuyPrice;
 
             <tr>
-
                 <td>@i.AssetName</td>
-
                 <td>@i.AssetType</td>
-
-                <td>@i.Amount</td>
-
-                <td>@i.BuyPrice Kč</td>
-
-                <td>@(i.SellPrice?.ToString() ?? "-")</td>
-
-                <td>@(i.Amount* i.BuyPrice) Kč</td>
-
-                <td>@i.TradeDate.ToShortDateString()</td>
-
-
+                <td>@i.Amount.ToString("N0")</td>
+                <td>@i.BuyPrice.ToString("N0") Kč</td>
 
                 <td>
+                    @(i.SellPrice.HasValue
+                                    ? i.SellPrice.Value.ToString("N0") + " Kč"
+                                    : "-")
+            </td>
 
-                    <form asp-action="Delete" method="post" style="display:inline;">
+                <td>@value.ToString("N0") Kč</td>
 
-                        <input type="hidden" name="id" value="@i.InvestmentId" />
+                <td>@i.TradeDate.ToString("dd.MM.yyyy")</td>
 
-                        <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
-
-
-
-                        <button type="submit"
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Opravdu smazat?');">
-
-                            Smazat
-
-                        </button>
-
-                    </form>
-
-                </td>
-
-                <td>
+                <td class="d-flex gap-2">
                     <a asp-action="Edit"
                        asp-route-id="@i.InvestmentId"
                        asp-route-portfolioId="@ViewBag.PortfolioId"
-                       class="btn btn-warning btn-sm">
+                       class="btn btn-warning-custom btn-sm">
                         Edit
                     </a>
+
+                    <form asp-action="Delete" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@i.InvestmentId" />
+                        <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
+                        <button type="submit"
+                                class="btn btn-danger-custom btn-sm"
+                                onclick="return confirm('Opravdu smazat investici?');">
+                            Delete
+                        </button>
+                    </form>
                 </td>
-
-
-
-
             </tr>
-
-        }
-
+                }
     </tbody>
-
-
-
-
 </table>

@@ -27,6 +27,28 @@ public class PortfolioController : Controller
 
         return View(portfolios);
     }
+    [HttpPost]
+    public IActionResult Delete(int id)
+    {
+        var portfolio = _context.Portfolios
+            .FirstOrDefault(p => p.PortfolioId == id);
+
+        if (portfolio == null)
+            return NotFound();
+
+        // smažeme i všechny investice uvnitř
+        var investments = _context.Investments
+            .Where(i => i.PortfolioId == id)
+            .ToList();
+
+        _context.Investments.RemoveRange(investments);
+        _context.Portfolios.Remove(portfolio);
+
+        _context.SaveChanges();
+
+        return RedirectToAction("Index");
+    }
+
 
     // FORMULÁŘ
     public IActionResult Create()

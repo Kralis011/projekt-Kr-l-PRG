@@ -1,41 +1,58 @@
 ﻿@model List<Kral_InvApp.Entities.Portfolio>
 
-<h2 class="mb-4">📊 Moje portfolia</h2>
+<div class="portfolio-wrapper">
 
-<a asp-action="Create" class="btn btn-primary mb-4">+ Nové portfolio</a>
+    <div class="portfolio-header">
+        <h2>📊 Moje portfolia</h2>
 
+        <a asp-action="Create" class="btn btn-primary btn-lg">
+            + Nové portfolio
+        </a>
+    </div>
 
-<div class="row">
-    @foreach (var p in Model)
-    {
-        <div class="col-md-4">
-            <div class="card shadow-sm mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">@p.Name</h5>
+    <div class="portfolio-grid">
+
+        @foreach (var p in Model)
+        {
+            <div class="portfolio-card">
+
+                <div class="portfolio-card-top">
+                    <h4>@p.Name</h4>
+                </div>
+
+                <div class="portfolio-actions">
 
                     <a asp-controller="Investment"
                        asp-action="Index"
                        asp-route-portfolioId="@p.PortfolioId"
-                       class="btn btn-outline-primary btn-sm">
-                        Zobrazit investice
-                    </a>
-                    <a asp-controller="Investment"
-                       asp-action="Index"
-                       asp-route-portfolioId="@p.PortfolioId">
-                        📊 Investice
+                       class="btn btn-outline-info btn-sm">
+                        📈 Investice
                     </a>
 
                     <a asp-controller="Investment"
                        asp-action="Create"
-                       asp-route-portfolioId="@p.PortfolioId">
-                        ➕ Přidat investici
+                       asp-route-portfolioId="@p.PortfolioId"
+                       class="btn btn-outline-success btn-sm">
+                        + Přidat investici
                     </a>
 
                 </div>
-            </div>
-        </div>
-    }
-</div>
 
+                <div class="portfolio-delete">
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@p.PortfolioId" />
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Smazat
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
 
 

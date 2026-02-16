@@ -1,43 +1,56 @@
 ﻿@model Kral_InvApp.Entities.Investment
 
-<h2>Upravit investici</h2>
+<h2 class="page-title">✏️ Upravit investici</h2>
 
-<form asp-action="Edit" method="post">
+<div class="form-card">
 
-    <input type="hidden" asp-for="InvestmentId" />
-    <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
+    <form asp-action="Edit" method="post">
 
-    <div>
-        <label>Asset</label>
-        <input asp-for="AssetName" />
-    </div>
+        <input type="hidden" asp-for="InvestmentId" />
+        <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
 
-    <div>
-        <label>Typ</label>
-        <input asp-for="AssetType" />
-    </div>
+        <div class="form-group">
+            <label>Asset</label>
+            <input asp-for="AssetName" class="form-control-custom" />
+        </div>
 
-    <div>
-        <label>Množství</label>
-        <input asp-for="Amount" />
-    </div>
+        <div class="form-group">
+            <label>Typ</label>
+            <input asp-for="AssetType" class="form-control-custom" />
+        </div>
 
-    <div>
-        <label>Nákupní cena</label>
-        <input asp-for="BuyPrice" />
-    </div>
+        <div class="form-group">
+            <label>Množství</label>
+            <input asp-for="Amount" class="form-control-custom" />
+        </div>
 
-    <div>
-        <label>Prodejní cena</label>
-        <input asp-for="SellPrice" />
-    </div>
+        <div class="form-group">
+            <label>Nákupní cena</label>
+            <input asp-for="BuyPrice" class="form-control-custom" />
+        </div>
 
-    <div>
-        <label>Datum</label>
-        <input asp-for="TradeDate" type="date" />
-    </div>
+        <div class="form-group">
+            <label>Prodejní cena</label>
+            <input asp-for="SellPrice" class="form-control-custom" />
+        </div>
 
-    <button type="submit">Uložit změny</button>
+        <div class="form-group">
+            <label>Datum</label>
+            <input asp-for="TradeDate" type="date" class="form-control-custom" />
+        </div>
 
-</form>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-success">
+                💾 Uložit změny
+            </button>
 
+            <a asp-action="Index"
+               asp-route-portfolioId="@ViewBag.PortfolioId"
+               class="btn btn-outline-light">
+                Zpět
+            </a>
+        </div>
+
+    </form>
+
+</div>

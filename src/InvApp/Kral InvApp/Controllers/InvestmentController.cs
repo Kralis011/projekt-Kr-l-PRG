@@ -21,16 +21,30 @@ namespace Kral_InvApp.Controllers
         // =============================
         public IActionResult Index(int portfolioId)
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-                return RedirectToAction("Login", "Account");
-
             var investments = _context.Investments
                 .Where(i => i.PortfolioId == portfolioId)
-                .OrderBy(i => i.TradeDate)
                 .ToList();
 
+            decimal invested = 0;
+            decimal current = 0;
+
+            foreach (var i in investments)
+            {
+                invested += i.Amount * i.BuyPrice;
+
+                if (i.SellPrice != null)
+                    current += i.Amount * i.SellPrice.Value;
+                else
+                    current += i.Amount * i.BuyPrice;
+            }
+
+            decimal profit = current - invested;
+
+            ViewBag.Invested = invested;
+            ViewBag.Current = current;
+            ViewBag.Profit = profit;
             ViewBag.PortfolioId = portfolioId;
+
             return View(investments);
         }
 
@@ -142,6 +156,40 @@ namespace Kral_InvApp.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", new { portfolioId });
+        }
+        public IActionResult Chart(int portfolioId)
+        {
+            var investments = _context.Investments
+                .Where(i => i.PortfolioId == portfolioId)
+                .OrderBy(i => i.TradeDate)
+                .ToList();
+
+            var labels = investments
+                .Select(i => i.TradeDate.ToString("dd.MM.yyyy"))
+                .ToList();
+
+            List<decimal> investedValues = new();
+            List<decimal> currentValues = new();
+
+            decimal investedSum = 0;
+            decimal currentSum = 0;
+
+            foreach (var i in investments)
+            {
+                investedSum += i.Amount * i.BuyPrice;
+
+                currentSum += (i.SellPrice.HasValue ? i.SellPrice.Value : i.BuyPrice) * i.Amount;
+
+                investedValues.Add(investedSum);
+                currentValues.Add(currentSum);
+            }
+
+            ViewBag.Labels = labels;
+            ViewBag.InvestedValues = investedValues;
+            ViewBag.CurrentValues = currentValues;
+            ViewBag.PortfolioId = portfolioId;
+
+            return View();
         }
 
 

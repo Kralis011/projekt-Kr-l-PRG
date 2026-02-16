@@ -1,34 +1,43 @@
 ﻿@model Kral_InvApp.Entities.User
+
 <h2 class="mb-4">📊 Dashboard</h2>
 
-<div class="row">
+<div class="row g-4">
+
     <div class="col-md-3">
-        <div class="card p-3 text-center">
+        <div class="card p-4 text-center stat-card">
             <h6>📁 Portfolia</h6>
-            <strong>@ViewBag.PortfolioCount</strong>
+            <div class="stat-number">
+                @ViewBag.PortfolioCount
+            </div>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card p-3 text-center">
+        <div class="card p-4 text-center stat-card">
             <h6>📌 Investice</h6>
-            <strong>@ViewBag.InvestmentCount</strong>
+            <div class="stat-number">
+                @ViewBag.InvestmentCount
+            </div>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card p-3 text-center">
+        <div class="card p-4 text-center stat-card">
             <h6>💰 Investováno</h6>
-            <strong>@ViewBag.Invested Kč</strong>
+            <div class="stat-number">
+                @(((decimal)ViewBag.Invested).ToString("N0")) Kč
+            </div>
         </div>
     </div>
 
     <div class="col-md-3">
-        <div class="card p-3 text-center">
+        <div class="card p-4 text-center stat-card">
             <h6>📈 Zisk / Ztráta</h6>
-            <strong class="@(ViewBag.Profit >= 0 ? "text-success" : "text-danger")">
-                @ViewBag.Profit Kč
-            </strong>
+            <div class="stat-number @(ViewBag.Profit >= 0 ? "text-success" : "text-danger")">
+                @(((decimal)ViewBag.Profit).ToString("N0")) Kč
+            </div>
         </div>
     </div>
+
 </div>

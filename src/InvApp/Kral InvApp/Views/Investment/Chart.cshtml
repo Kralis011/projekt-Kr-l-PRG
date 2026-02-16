@@ -1,48 +1,45 @@
-﻿@{
-    var labels = ViewBag.Labels as List<string>;
-    var values = ViewBag.Values as List<decimal>;
-}
+﻿<div class="chart-wrapper">
+    <canvas id="chart"></canvas>
+</div>
 
-<h2 class="mb-4">📊 Hodnota portfolia</h2>
-
-<canvas id="portfolioChart" height="100"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const ctx = document.getElementById('portfolioChart').getContext('2d');
+    var labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Labels));
+    var investedValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.InvestedValues));
+    var currentValues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.CurrentValues));
+        var labels = @Html.Raw(Json.Serialize(ViewBag.Labels));
+    var investedValues = @Html.Raw(Json.Serialize(ViewBag.InvestedValues));
+    var currentValues = @Html.Raw(Json.Serialize(ViewBag.CurrentValues));
 
-    new Chart(ctx, {
+
+     new Chart(document.getElementById("chart"), {
         type: 'line',
         data: {
-            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(labels)),
-            datasets: [{
-                label: 'Hodnota investic (Kč)',
-                data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(values)),
-                borderColor: '#4dabf7',
-                backgroundColor: 'rgba(77, 171, 247, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Investováno',
+                    data: investedValues,
+                    borderColor: '#4e73df',
+                    backgroundColor: 'transparent',
+                    tension: 0.3
+                },
+                {
+                    label: 'Aktuální hodnota',
+                    data: currentValues,
+                    borderColor: '#1cc88a',
+                    backgroundColor: 'transparent',
+                    tension: 0.3
+                }
+            ]
         },
         options: {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#e6e6e6'
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: { color: '#e6e6e6' },
-                    grid: { color: '#2a2f3a' }
-                },
-                y: {
-                    ticks: { color: '#e6e6e6' },
-                    grid: { color: '#2a2f3a' }
-                }
-            }
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
+
+
 </script>
