@@ -1,0 +1,43 @@
+﻿@model Kral_InvApp.Entities.Investment
+
+<h2>Upravit investici</h2>
+
+<form asp-action="Edit" method="post">
+
+    <input type="hidden" asp-for="InvestmentId" />
+    <input type="hidden" name="portfolioId" value="@ViewBag.PortfolioId" />
+
+    <div>
+        <label>Asset</label>
+        <input asp-for="AssetName" />
+    </div>
+
+    <div>
+        <label>Typ</label>
+        <input asp-for="AssetType" />
+    </div>
+
+    <div>
+        <label>Množství</label>
+        <input asp-for="Amount" />
+    </div>
+
+    <div>
+        <label>Nákupní cena</label>
+        <input asp-for="BuyPrice" />
+    </div>
+
+    <div>
+        <label>Prodejní cena</label>
+        <input asp-for="SellPrice" />
+    </div>
+
+    <div>
+        <label>Datum</label>
+        <input asp-for="TradeDate" type="date" />
+    </div>
+
+    <button type="submit">Uložit změny</button>
+
+</form>
+

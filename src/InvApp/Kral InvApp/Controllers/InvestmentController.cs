@@ -110,6 +110,41 @@ namespace Kral_InvApp.Controllers
             return RedirectToAction("Index", new { portfolioId });
 
         }
+        
+        public IActionResult Edit(int id, int portfolioId)
+        {
+            var investment = _context.Investments
+                .FirstOrDefault(i => i.InvestmentId == id);
+
+            if (investment == null)
+                return NotFound();
+
+            ViewBag.PortfolioId = portfolioId;
+
+            return View(investment);
+        }
+        [HttpPost]
+        public IActionResult Edit(Investment model, int portfolioId)
+        {
+            var investment = _context.Investments
+                .FirstOrDefault(i => i.InvestmentId == model.InvestmentId);
+
+            if (investment == null)
+                return NotFound();
+
+            investment.AssetName = model.AssetName;
+            investment.AssetType = model.AssetType;
+            investment.Amount = model.Amount;
+            investment.BuyPrice = model.BuyPrice;
+            investment.SellPrice = model.SellPrice;
+            investment.TradeDate = model.TradeDate;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", new { portfolioId });
+        }
+
+
 
 
     }
